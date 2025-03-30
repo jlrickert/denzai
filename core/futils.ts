@@ -1,6 +1,5 @@
 import * as Os from "node:os";
 import * as Path from "node:path";
-import { spawnSync } from "node:child_process";
 import * as Crypto from "node:crypto";
 import * as Fs from "node:fs/promises";
 import { exists } from "@std/fs";
@@ -159,7 +158,16 @@ export async function doEdit(file: string): Promise<Result<string, DenzaiErr>> {
 	if (editor === null) {
 		return Err(new DenzaiErr({ code: "EXE_NOT_FOUND" }));
 	}
-	spawnSync(editor, [file], { stdio: "inherit" });
+	const cmd = new Deno.Command(editor, {
+		args: [file],
+		stdin: "inherit",
+		stdout: "inherit",
+		stderr: "inherit",
+	});
+	const p = cmd.spawn();
+
+	// Wait for the editor to exit
+	await p.status;
 	return await readFile(file);
 }
 
