@@ -27,7 +27,8 @@ export function userConfigDir(): Result<string, Error> {
 	}
 
 	if (
-		currentOs === "linux" || currentOs === "freebsd" ||
+		currentOs === "linux" ||
+		currentOs === "freebsd" ||
 		currentOs === "openbsd"
 	) {
 		if (process.env.XDG_CONFIG_HOME) {
