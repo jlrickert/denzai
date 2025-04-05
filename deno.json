@@ -1,9 +1,5 @@
 {
-	"workspace": [
-		"./core",
-		"./backend/",
-		"./store/"
-	],
+	"workspace": ["./core", "./backend/", "./store/", "./utils/"],
 	"fmt": {
 		"useTabs": true,
 		"indentWidth": 4
