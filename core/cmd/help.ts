@@ -1,5 +1,5 @@
-import { Cmd } from "../cmd.ts";
-import { CmdApi, Ctx } from "../types.ts";
+import type { Cmd } from "../cmd.ts";
+import type { CmdApi, Ctx } from "../types.ts";
 
 export const helpCmd: CmdApi = {
 	name: "help",
@@ -26,7 +26,9 @@ export const helpCmd: CmdApi = {
 					continue;
 				}
 				const line = [];
-				line.push(`${"\t".repeat(depth)}${child.name.padEnd(maxNameLength)}`);
+				line.push(
+					`${"\t".repeat(depth)}${child.name.padEnd(maxNameLength)}`,
+				);
 				if (child.short) {
 					line.push(`← ${child.short}`);
 				}

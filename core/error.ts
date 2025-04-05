@@ -1,4 +1,8 @@
-export type DenzaiCode = "EXE_NOT_FOUND" | "FILE_NOT_FOUND" | "PARENT_EXPECTED" | "INVARIANT";
+export type DenzaiCode =
+	| "EXE_NOT_FOUND"
+	| "FILE_NOT_FOUND"
+	| "PARENT_EXPECTED"
+	| "INVARIANT";
 
 function getCallerInfo(n: number = 2): string | null {
 	const err = new Error();
@@ -20,7 +24,10 @@ export class DenzaiErr extends Error {
 	public readonly code: string;
 	public readonly context?: unknown;
 
-	static invariant(condition: any, message?: string | (() => string)): asserts condition {
+	static invariant(
+		condition: any,
+		message?: string | (() => string),
+	): asserts condition {
 		if (condition) {
 			return;
 		}
@@ -41,13 +48,21 @@ export class DenzaiErr extends Error {
 		}
 
 		const stack = getCallerInfo(3);
-		throw new DenzaiErr({ code: "INVARIANT", message: msg, context: { stack } });
+		throw new DenzaiErr({
+			code: "INVARIANT",
+			message: msg,
+			context: { stack },
+		});
 	}
 
-	constructor(options: { code: DenzaiCode; message?: string; context?: unknown }) {
+	constructor(
+		options: { code: DenzaiCode; message?: string; context?: unknown },
+	) {
 		super(options.message);
 		this.code = options.code;
-		this.message = options.message ? `${options.code}: ${options.message}` : options.code;
+		this.message = options.message
+			? `${options.code}: ${options.message}`
+			: options.code;
 		this.context = options.context;
 	}
 }

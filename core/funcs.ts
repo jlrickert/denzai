@@ -1,4 +1,7 @@
-export type Result<T, E> = { success: true; value: T } | { success: false; error: E };
+export type Result<T, E> = { success: true; value: T } | {
+	success: false;
+	error: E;
+};
 
 export function Ok<T>(value: T): Result<T, never> {
 	return { success: true, value };

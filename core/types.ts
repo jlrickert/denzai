@@ -1,4 +1,4 @@
-import { Cmd } from "./cmd.ts";
+import type { Cmd } from "./cmd.ts";
 import type { DenzaiErr } from "./error.ts";
 
 /**

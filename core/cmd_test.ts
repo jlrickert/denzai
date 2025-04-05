@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
 import { Cmd } from "./cmd.ts";
 import { helpCmd } from "./cmd/help.ts";
-import { CmdApi, Ctx } from "./types.ts";
-import { DenzaiErr } from "./error.ts";
+import type { CmdApi, Ctx } from "./types.ts";
+import type { DenzaiErr } from "./error.ts";
 
 const addCmd: CmdApi = {
 	name: "add",
@@ -46,13 +46,14 @@ usage: git <command>
 Deno.test("Should call init in the expected sequence", async () => {
 	type T = { name: string; args: string[] };
 	let fnCalls: T[] = [];
-	const initFn: (ctx: Ctx, args: string[]) => Promise<DenzaiErr | null> = async (ctx, args) => {
-		fnCalls.push({
-			name: ctx.cmd.name,
-			args,
-		});
-		return null;
-	};
+	const initFn: (ctx: Ctx, args: string[]) => Promise<DenzaiErr | null> =
+		async (ctx, args) => {
+			fnCalls.push({
+				name: ctx.cmd.name,
+				args,
+			});
+			return null;
+		};
 
 	const root = new Cmd({
 		name: "a",

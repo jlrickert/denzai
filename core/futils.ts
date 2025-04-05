@@ -26,7 +26,10 @@ export function userConfigDir(): Result<string, Error> {
 		return Ok(Path.join(userHomeDir(), "Library", "Application Support"));
 	}
 
-	if (currentOs === "linux" || currentOs === "freebsd" || currentOs === "openbsd") {
+	if (
+		currentOs === "linux" || currentOs === "freebsd" ||
+		currentOs === "openbsd"
+	) {
 		if (process.env.XDG_CONFIG_HOME) {
 			return Ok(process.env.XDG_CONFIG_HOME);
 		}
@@ -88,7 +91,19 @@ export function userStateDir(): Result<string, Error> {
 export async function userEditor(): Promise<string | null> {
 	const visual = process.env.VISUAL;
 	const editor = process.env.EDITOR;
-	for (const ed of [visual, editor, "code", "nvim", "vim", "vi", "nvi", "emacs", "nano"]) {
+	for (
+		const ed of [
+			visual,
+			editor,
+			"code",
+			"nvim",
+			"vim",
+			"vi",
+			"nvi",
+			"emacs",
+			"nano",
+		]
+	) {
 		if (ed === undefined || ed?.length <= 0) {
 			continue;
 		}
@@ -128,16 +143,25 @@ export async function whereis(exe: string): Promise<string | null> {
 	return res ?? null;
 }
 
-export async function readFile(filename: string): Promise<Result<string, DenzaiErr>> {
+export async function readFile(
+	filename: string,
+): Promise<Result<string, DenzaiErr>> {
 	const path = new URL(filename, import.meta.url);
 	try {
 		return Ok(await Fs.readFile(path, { encoding: "utf8" }));
 	} catch (error) {
-		return Err(new DenzaiErr({ code: "FILE_NOT_FOUND", context: { filename, path, error } }));
+		return Err(
+			new DenzaiErr({
+				code: "FILE_NOT_FOUND",
+				context: { filename, path, error },
+			}),
+		);
 	}
 }
 
-export async function fileChecksum(filename: string): Promise<Result<string, DenzaiErr>> {
+export async function fileChecksum(
+	filename: string,
+): Promise<Result<string, DenzaiErr>> {
 	const path = new URL(filename, import.meta.url);
 	console.log({ path });
 	try {
@@ -145,7 +169,12 @@ export async function fileChecksum(filename: string): Promise<Result<string, Den
 		const hash = contentHash(data);
 		return Ok(hash);
 	} catch (error) {
-		return Err(new DenzaiErr({ code: "FILE_NOT_FOUND", context: { filename, path, error } }));
+		return Err(
+			new DenzaiErr({
+				code: "FILE_NOT_FOUND",
+				context: { filename, path, error },
+			}),
+		);
 	}
 }
 

@@ -1,4 +1,4 @@
-import { CompArgs } from "./types.ts";
+import type { CompArgs } from "./types.ts";
 
 function getWordNumber(paragraph: string, charPosition: number): number | null {
 	// Ensure the charPosition is within bounds

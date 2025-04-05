@@ -1,5 +1,5 @@
-import { DenzaiErr } from "./error.ts";
-import { Ok, Result } from "./funcs.ts";
+import type { DenzaiErr } from "./error.ts";
+import { Ok, type Result } from "./funcs.ts";
 import { makeCompArgs } from "./mod.ts";
 import type { CmdApi, CompArgs, Ctx, LogFn, Schema } from "./types.ts";
 
@@ -24,10 +24,6 @@ export const defaultPrintErrFn: Ctx["print"] = async (value: string) => {
 	const data = encoder.encode(value);
 	await Deno.stderr.write(data);
 };
-
-async function logThingy(data: string) {
-	await Deno.writeTextFile("/tmp/logs2", data, { append: true });
-}
 
 export const defaultLogFn: Ctx["log"] = async ({ context, message, level }) => {
 	const obj = {
@@ -71,11 +67,17 @@ function transformContext(ctx: Ctx) {
 	};
 }
 
-export async function defaultCmdComplete(ctx: Ctx, compArgs: CompArgs): Promise<string[]> {
+export async function defaultCmdComplete(
+	ctx: Ctx,
+	compArgs: CompArgs,
+): Promise<string[]> {
 	return ctx.cmd.children.map((a) => a.name);
 }
 
-export async function defaultComplete(ctx: Ctx, compArgs: CompArgs): Promise<string[]> {
+export async function defaultComplete(
+	ctx: Ctx,
+	compArgs: CompArgs,
+): Promise<string[]> {
 	return [];
 }
 
@@ -172,7 +174,10 @@ export class Cmd {
 		return null;
 	}
 
-	async completion(ctx: Ctx, args: CompArgs): Promise<Result<string[], DenzaiErr>> {
+	async completion(
+		ctx: Ctx,
+		args: CompArgs,
+	): Promise<Result<string[], DenzaiErr>> {
 		const cmdCmp = ctx.cmd.api.completer?.cmdComplete ?? defaultCmdComplete;
 		const cmp = ctx.cmd.api.completer?.complete ?? defaultComplete;
 		const cmdComps = await cmdCmp(ctx, args);
@@ -189,7 +194,9 @@ export class Cmd {
 	 * updates the command's children, name, alias, long description, short
 	 * description, and schema based on the provided api object.
 	 */
-	updateApi(api: Partial<Omit<CmdApi, "children"> & { children: (CmdApi | Cmd)[] }>): void {
+	updateApi(
+		api: Partial<Omit<CmdApi, "children"> & { children: (CmdApi | Cmd)[] }>,
+	): void {
 		for (const key in api) {
 			// deno-lint-ignore no-prototype-builtins
 			if (api.hasOwnProperty(key)) {
@@ -232,11 +239,17 @@ export class Cmd {
 	 * cases where it cannot be known. Ensure `stripCmd` is true on
 	 * `bashCompArgs` when getting completion enformation from the environment.
 	 */
-	async runCompletions(args: CompArgs, options?: RunCmdOptions): Promise<DenzaiErr | null> {
+	async runCompletions(
+		args: CompArgs,
+		options?: RunCmdOptions,
+	): Promise<DenzaiErr | null> {
 		const ctx = await this.buildContext(args, options);
 		const res = await this.completion(
 			ctx,
-			makeCompArgs({ line: ctx.cmdArgs.join(" "), point: ctx.cmdArgs.length }),
+			makeCompArgs({
+				line: ctx.cmdArgs.join(" "),
+				point: ctx.cmdArgs.length,
+			}),
 		);
 		if (!res.success) {
 			return res.error;
@@ -248,7 +261,10 @@ export class Cmd {
 	/**
 	 * Runs the command with the given arguments.
 	 */
-	async runWithArgs(args: string[], options?: RunCmdOptions): Promise<DenzaiErr | null> {
+	async runWithArgs(
+		args: string[],
+		options?: RunCmdOptions,
+	): Promise<DenzaiErr | null> {
 		const ctx = await this.buildContext(args, options);
 		const { regxArgs, maxArgs, minArgs, exact } = ctx.cmd.schema;
 		if (exact && ctx.cmdArgs.length !== exact) {
@@ -277,7 +293,10 @@ export class Cmd {
 		}
 
 		for (const child of ctx.cmd.children ?? []) {
-			if (child.name === cmdName || (cmdName.length > 0 && child.name.startsWith(cmdName))) {
+			if (
+				child.name === cmdName ||
+				(cmdName.length > 0 && child.name.startsWith(cmdName))
+			) {
 				return child;
 			}
 		}
@@ -305,7 +324,10 @@ export class Cmd {
 	 * Builds a command context based on the provided arguments and options.
 	 * Calls the init function as it follows the path.
 	 */
-	private async buildContext(args: CompArgs | string[], options?: RunCmdOptions): Promise<Ctx> {
+	private async buildContext(
+		args: CompArgs | string[],
+		options?: RunCmdOptions,
+	): Promise<Ctx> {
 		const print = options?.print ?? defaultPrintFn;
 		const printErr = options?.printErr ?? defaultPrintErrFn;
 		const log: LogFn = options?.log ?? nullLogFn;
