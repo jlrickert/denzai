@@ -9,11 +9,11 @@ import { DenzaiErr } from "./error.ts";
 
 export class UnsupportedOS extends Error {}
 
-export function isosec(date?: Date) {
+export function isosec(date?: Date): string {
 	return (date ?? new Date()).toISOString();
 }
 
-export function userHomeDir() {
+export function userHomeDir(): string {
 	return Os.homedir();
 }
 
@@ -148,7 +148,7 @@ export async function readFile(
 ): Promise<Result<string, DenzaiErr>> {
 	const path = new URL(filename, import.meta.url);
 	try {
-		return Ok(await Fs.readFile(path, { encoding: "utf8" }));
+		return Ok(await Fs.readFile(path.href, { encoding: "utf8" }));
 	} catch (error) {
 		return Err(
 			new DenzaiErr({
@@ -165,7 +165,7 @@ export async function fileChecksum(
 	const path = new URL(filename, import.meta.url);
 	console.log({ path });
 	try {
-		const data = await Fs.readFile(path, { encoding: "utf8" });
+		const data = await Fs.readFile(path.href, { encoding: "utf8" });
 		const hash = contentHash(data);
 		return Ok(hash);
 	} catch (error) {
