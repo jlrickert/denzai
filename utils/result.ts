@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import { dual } from "./funcs.ts";
 import * as O from "./optional.ts";
 import { invariant } from "./errors.ts";

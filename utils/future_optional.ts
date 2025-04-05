@@ -11,12 +11,12 @@ export function some<T>(value: T): FutureOptional<T> {
 	return F.of(O.of(value));
 }
 
-export const none = F.of(O.none);
+export const none: FutureOptional<never> = F.of(O.none);
 
 export async function attempt<T>(f: () => F.Future<T>): FutureOptional<T> {
 	try {
 		return some(await f());
-	} catch (e) {
+	} catch (_e) {
 		return none;
 	}
 }

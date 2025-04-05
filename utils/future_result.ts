@@ -3,8 +3,8 @@ import * as R from "./result.ts";
 import * as O from "./optional.ts";
 import { dual } from "./funcs.ts";
 import { invariant } from "./errors.ts";
-import { Future, Result } from "./mod.ts";
-import { Predicate } from "./traits.ts";
+import { type Future, Result } from "./mod.ts";
+import type { Predicate } from "./traits.ts";
 
 export type FutureResult<T, E> = F.Future<R.Result<T, E>>;
 

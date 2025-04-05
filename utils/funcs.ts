@@ -542,9 +542,9 @@ export function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
 export function omit<T, K extends keyof T>(obj: T, ...keys: K[]): Omit<T, K> {
 	const result = {} as Omit<T, K>;
 	for (const key in obj) {
-		// @ts-expect-error
+		// @ts-expect-error this works
 		if (!keys.includes(key as K)) {
-			// @ts-expect-error
+			// @ts-expect-error this works
 			result[key as keyof T] = obj[key];
 		}
 	}

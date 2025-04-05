@@ -1,8 +1,22 @@
 {
-	"workspace": ["./core", "./backend/", "./store/", "./utils/"],
+	"workspace": [
+		"./core",
+		"./backend/",
+		"./store/",
+		"./utils/"
+	],
+	"license": "Apache-2.0",
 	"fmt": {
 		"useTabs": true,
 		"indentWidth": 4
+	},
+	"lint": {
+		"rules": {
+			"exclude": [
+				"require-await",
+				"no-explicit-any"
+			]
+		}
 	},
 	"compilerOptions": {
 		"strict": true,

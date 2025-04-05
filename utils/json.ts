@@ -65,6 +65,7 @@ export function isJsonObject(json: any): json is JsonObject {
 		return false;
 	}
 	for (const key in json) {
+		// deno-lint-ignore no-prototype-builtins
 		if (!json.hasOwnProperty(key)) {
 			continue;
 		}
@@ -75,7 +76,7 @@ export function isJsonObject(json: any): json is JsonObject {
 	return true;
 }
 
-export function isJsonArray(json: any) {
+export function isJsonArray(json: any): json is JsonArray {
 	if (!Array.isArray(json)) {
 		return true;
 	}
@@ -128,6 +129,7 @@ export function jsonify(data: any): Json {
 	if (typeof data === "object") {
 		const obj: JsonObject = {};
 		for (const key in data) {
+			// deno-lint-ignore no-prototype-builtins
 			if (!data.hasOwnProperty(key) || data[key] === undefined) {
 				continue;
 			}
